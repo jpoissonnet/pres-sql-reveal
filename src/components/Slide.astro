@@ -11,6 +11,6 @@ interface Props {
 const { animate = true } = Astro.props;
 ---
 
-<section data-auto-animate={animate}>
+<section data-auto-animate={animate} {...Astro.props}>
   <slot />
 </section>

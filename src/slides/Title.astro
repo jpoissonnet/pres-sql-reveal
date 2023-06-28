@@ -2,30 +2,46 @@
 import Slide from '../components/Slide.astro';
 ---
 
-<Slide>
+<Slide
+  data-background-image='https://audreyhossepian.fr/img/logo.png'
+  data-background-gradient='linear-gradient(40deg, #fc466b, #3f5efb)'
+  data-background-position='95% 90%'
+  data-background-size='10%'
+  data-background-repeat='no-repeat'
+>
   <h2>Présentation SQL TP</h2>
   <p>Kafadar Cihan - Poissonnet Jules</p>
-  <small>2022-2023</small>
-  <p class='fragment'>
-    <label for='bg'>Changer le background</label>
-    <input type='checkbox' id='bg' />
+  <p class='small'>2022-2023</p>
+</Slide>
+
+<Slide
+  data-background-image='https://audreyhossepian.fr/img/logo.png'
+  data-background-gradient='linear-gradient(40deg, #fc466b, #3f5efb)'
+  data-background-position='95% 90%'
+  data-background-size='10%'
+  data-background-repeat='no-repeat'
+>
+  <h2>Présentation SQL TP</h2>
+  <p>Kafadar Cihan - Poissonnet Jules</p>
+  <p class='small'>2022-2023</p>
+  <br />
+  <p class='small'>
+    <label for='bg'>Changer le background pour éviter les problèmes</label>
+    <input type='checkbox' id='bg' inert />
   </p>
 </Slide>
 
-<style lang='scss' is:inline>
-  input#bg:checked {
-    font-size: large;
-  }
-  main {
-    background: url(https://audreyhossepian.fr/img/logo.png),
-      linear-gradient(40deg, #fc466b, #3f5efb);
-    background-position: 95% 90%;
-    background-repeat: no-repeat;
-  }
-</style>
+<Slide>
+  <h2>Présentation SQL TP</h2>
+  <p>Kafadar Cihan - Poissonnet Jules</p>
+  <p class='small'>2022-2023</p>
+</Slide>
 
 <style>
-  /*   input[type='checkbox'] {
-    visibility: hidden;
-  } */
+  .small {
+    display: inline-block;
+    font-size: 0.6em;
+    line-height: 1.2em;
+    vertical-align: top;
+  }
 </style>
