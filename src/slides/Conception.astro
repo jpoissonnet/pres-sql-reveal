@@ -1,0 +1,84 @@
+---
+import Slide from '../components/Slide.astro';
+---
+
+<Slide>
+  <h2>Conception</h2>
+  <img data-id='box' src='/schema.png' alt='schema' />
+  <style>
+    img {
+      height: 60vh;
+    }
+  </style>
+</Slide>
+<Slide>
+  <h2>Insertion de données</h2>
+  <ul>
+    <li class='fragment'>Github Copilot</li>
+    <li class='fragment'>ChatGPT</li>
+    <li class='fragment'>generatedata.com</li>
+    <li class='fragment'>
+      Script javascript
+      <pre
+        class='fragment'
+        id='pre'>
+        <code class="javascript" is:raw>let string = '';
+for (let index = 1; index < 200; index++) {
+  let str = index.toString().padStart(3, '0');
+  string += `INSERT INTO PERSONNE 
+  (numero_secu_sociale, is_cadre, id_adresse)
+  VALUES (100000000000${str}, true, ${index});`;
+}
+console.log(string);</code>
+<button class="fragment" id="run">▶️</button>
+      </pre>
+    </li>
+    <li class='fragment'>Vim</li>
+  </ul>
+  <script>
+    document.querySelector('#run').addEventListener('click', execute);
+    function execute() {
+      let string = '';
+      for (let index = 1; index < 200; index++) {
+        let str = index.toString().padStart(3, '0');
+        string += `INSERT INTO PERSONNE 
+    (numero_secu_sociale, is_cadre, id_adresse)
+    VALUES (100000000000${str}, true, ${index});`;
+      }
+      console.log(string);
+    }
+  </script>
+</Slide>
+
+<style is:inline>
+  .reveal #pre {
+    width: 100%;
+    position: relative;
+  }
+</style>
+<style lang='scss'>
+  code.javascript {
+    width: fit-content;
+  }
+  
+  #run {
+    border: none;
+    background: none;
+    padding: 0;
+    font-size: 40px;
+    cursor: pointer;
+    outline: inherit;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    opacity: 0;
+
+    :hover > & {
+      opacity: 1;
+    }
+
+    &:hover{
+      filter: invert(1);
+    }
+  }
+</style>

@@ -1,0 +1,19 @@
+{
+  "name": "pres-sql",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "astro build",
+    "deploy": "pnpm build",
+    "dev": "astro dev",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "1.6.0",
+    "reveal.js": "4.4.0"
+  },
+  "devDependencies": {
+    "sass": "1.55.0"
+  }
+}

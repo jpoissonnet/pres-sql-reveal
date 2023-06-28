@@ -1,0 +1,31 @@
+---
+import Slide from '../components/Slide.astro';
+---
+
+<Slide>
+  <h2>Présentation SQL TP</h2>
+  <p>Kafadar Cihan - Poissonnet Jules</p>
+  <small>2022-2023</small>
+  <p class='fragment'>
+    <label for='bg'>Changer le background</label>
+    <input type='checkbox' id='bg' />
+  </p>
+</Slide>
+
+<style lang='scss' is:inline>
+  input#bg:checked {
+    font-size: large;
+  }
+  main {
+    background: url(https://audreyhossepian.fr/img/logo.png),
+      linear-gradient(40deg, #fc466b, #3f5efb);
+    background-position: 95% 90%;
+    background-repeat: no-repeat;
+  }
+</style>
+
+<style>
+  /*   input[type='checkbox'] {
+    visibility: hidden;
+  } */
+</style>
