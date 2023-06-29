@@ -22,5 +22,110 @@ import Slide from '../components/Slide.astro';
   <div class:list={['wrapper']}>
     <strike><h2>Requêtes</h2></strike>
     <pre><code class="hljs sql">SELECT * FROM comprendre WHERE mal_de_crane=false</code></pre>
+    <small class='fragment'
+      >Note pour trop tard: <strong>ne pas se fier à l'ordre</strong>
+    </small>
   </div>
+</Slide>
+<Slide>
+  <div class:list={['wrapper']}>
+    <h2>Requêtes</h2>
+    <p>8. Calculer les 3 types de prestation les plus faites dans le système</p>
+    <pre><code class="hljs sql" data-trim data-noescape>SELECT type, COUNT(*)<br />FROM PRESTATION_SOCIALE<br />GROUP BY type ORDER BY COUNT(*) DESC LIMIT 3;</code></pre>
+  </div>
+</Slide>
+<Slide>
+  <div class:list={['wrapper']}>
+    <h2>Requêtes</h2>
+    <p>
+      9. Calculer les 3 types de prestation ayant coûtées le plus cher à la
+      Sécurité Sociale au cumulé
+    </p>
+    <pre><code class="hljs sql" data-trim data-noescape>SELECT type, SUM(cout)<br />FROM PRESTATION_SOCIALE<br />GROUP BY type ORDER BY SUM(cout) DESC LIMIT 3;</code></pre>
+  </div>
+</Slide>
+<Slide>
+  <div class:list={['wrapper']}>
+    <h2>Requêtes</h2>
+    <p>3. Calculer le total financier par type d’acteurs médicaux</p>
+    <pre><code class="hljs sql" data-trim data-noescape>SELECT type, SUM(cout) FROM PRESTATION_SOCIALE GROUP BY type;</code></pre>
+  </div>
+</Slide>
+<Slide>
+  <div class:list={['wrapper']}>
+    <h2>Requêtes</h2>
+    <p>
+      4. Calculer la moyenne des prestations médicales des retraités ayant une
+      prise en charge de 100%
+    </p>
+    <pre><code class="hljs sql" data-trim data-noescape>SELECT AVG(cout)<br />FROM PRESTATION_SOCIALE ps<br />JOIN PERSONNE P ON P.numero_secu_sociale = ps.id_personne<br />WHERE ps.prct_prise_en_charge = 100<br />AND ps.id_personne NOT IN (SELECT id_personne FROM SALAIRE);</code></pre>
+  </div>
+</Slide>
+<Slide>
+  <div class:list={['wrapper']}>
+    <h2>Requêtes</h2>
+    <p>5. Dans quelle région « consomme »-t-on plus de prestations ?</p>
+    <pre><code class="hljs sql" data-trim data-noescape>SELECT r.nom, SUM(cout)<br />FROM REGION r JOIN <br /><span class="fragment">JOIN VILLE v on r.id_region = v.id_region<br />JOIN ADRESSE A on v.id_ville = A.id_ville<br />JOIN PERSONNE P on A.id_adresse = P.id_adresse<br />JOIN PRESTATION_SOCIALE ps on P.numero_secu_sociale = ps.id_personne</span><br />GROUP BY r.nom ORDER BY SUM(cout) DESC LIMIT 1;</code></pre>
+  </div>
+</Slide>
+<Slide>
+  <div class:list={['wrapper']}>
+    <h2>Requêtes</h2>
+    <p>
+      7. Donner la requête pour insérer les les QPV pour qualifier les adresses
+      via du geofencing (calcule d’un point dans un polygone)
+    </p>
+    <pre><code class="hljs sql" data-trim data-noescape>UPDATE ELEVE SET note=20 WHERE groupe=9; <span class="fragment">😊</span></code></pre>
+  </div>
+</Slide>
+<Slide>
+  <div class:list={['wrapper']}>
+    <h2>Requêtes</h2>
+    <p>
+      10. Donner l’ensemble des prestations médicales par QPV avec leur coût
+      total pour la Sécurité Sociale
+    </p>
+    <pre><code class="hljs sql" data-trim data-noescape>SELECT Q.id_qpv, PS.acte, SUM(PS.cout) AS cout_total <br />FROM PRESTATION_SOCIALE PS <br />JOIN PERSONNE P ON PS.id_personne = P.numero_secu_sociale <br />JOIN ADRESSE A ON P.ID_ADRESSE = A.id_adresse <br />JOIN QPV Q ON A.id_qpv = Q.id_qpv <br />GROUP BY Q.id_qpv, PS.acte;</code></pre>
+  </div>
+</Slide>
+<Slide>
+  <div class:list={['wrapper']}>
+    <h2>Requêtes</h2>
+    <p>
+      6. Dans quelle région « intègre »-t-on plus de cotisations ? (Cumule des
+      cotisations le plus élevée)
+    </p>
+    <pre><code class="hljs sql" data-trim data-noescape>SELECT R.nom, SUM(S.montant <br />* (CASE WHEN P.is_cadre = TRUE THEN 0.27 ELSE 0.23 END))<br />AS cotisation_total FROM REGION R <br />JOIN VILLE V ON R.id_region = V.id_region <br />JOIN ADRESSE A ON V.id_ville = A.id_ville <br />JOIN PERSONNE P ON A.id_adresse = P.id_adresse <br />JOIN SALAIRE S ON P.numero_secu_sociale = S.id_personne<br />GROUP BY R.nom<br />ORDER BY SUM(S.montant * (CASE WHEN P.is_cadre = TRUE THEN <br />0.27 ELSE 0.23 END)) DESC<br />LIMIT 1;</code>
+  </pre>
+  </div>
+</Slide>
+<Slide>
+  <div class:list={['wrapper']}>
+    <h2>Requêtes</h2>
+    <p>
+      2. Calculer la cotisation de chaque salarié en rapport avec ses prises en
+      charges
+    </p>
+    <pre><code class="hljs sql" data-trim data-noescape>SELECT P.numero_secu_sociale AS person_id,<br />SUM(S.montant) * (CASE WHEN P.is_cadre = TRUE THEN  0.27 ELSE 0.23 END)<br />AS cotisation<br />FROM PERSONNE P <br />JOIN SALAIRE S ON P.numero_secu_sociale = S.id_personne <br />GROUP BY P.numero_secu_sociale;</code>
+  </pre>
+  </div>
+</Slide>
+<Slide>
+  <div class:list={['wrapper']}>
+    <h2>Requêtes</h2>
+    <small>
+      1. Calculer la balance de votre système de sécurité social en sachant que
+      les produits correspondent à 15.9% du salaire Brut de chaque salarié ainsi
+      que 29% du salaire net et les charges correspondant au montant total des
+      prises en charge des prestations médicales réalisées
+    </small>
+    <pre><code class="hljs sql small" data-trim data-noescape>SELECT SUM(PS.prct_prise_en_charge * PS.cout) AS charges,<br />SUM(S.montant) AS salaires_bruts,<br />(SELECT SUM(total_salaires)<br />FROM (SELECT P.numero_secu_sociale,<br />SUM(S.montant) * (CASE WHEN P.is_cadre = TRUE THEN 0.73 ELSE 0.77 END) AS total_salaires<br />FROM PERSONNE P<br />JOIN SALAIRE S ON P.numero_secu_sociale = S.id_personne<br />GROUP BY P.numero_secu_sociale) AS subquery) AS salaires_net,<br />SUM(S.montant) + (SELECT SUM(total_salaires)<br />FROM (SELECT P.numero_secu_sociale,<br />SUM(S.montant) * (CASE WHEN P.is_cadre = TRUE THEN 0.73 ELSE 0.77 END) AS total_salaires<br />FROM PERSONNE P<br />JOIN SALAIRE S ON P.numero_secu_sociale = S.id_personne<br />GROUP BY P.numero_secu_sociale) AS subquery) AS produits<br />SALAIRE S<br />JOIN PERSONNE P ON S.id_personne = P.numero_secu_sociale<br />JOIN PRESTATION_SOCIALE PS ON P.numero_secu_sociale = PS.id_personne;</code>
+  </pre>
+  </div>
+  <style is:inline>
+    .small {
+      font-size: 0.8em;
+      width: fit-content;
+    }
+  </style>
 </Slide>
